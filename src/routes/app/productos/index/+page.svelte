@@ -170,30 +170,7 @@
     padding: 2rem 0;
   }
 
-  /* Imágenes de productos responsivas y bonitas */
-  .card img,
-  .img-fluid {
-    width: 100%;
-    height: auto;
-    max-height: 220px;
-    object-fit: contain;
-    background: #fff8f0;
-    padding: 0.5rem;
-    display: block;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 768px) {
-    .card img,
-    .img-fluid {
-      max-height: 140px;
-      padding: 0.3rem;
-    }
-    .col-md-3 {
-      flex: 0 0 100%;
-      max-width: 100%;
-    }
-  }
+  
 </style>
 
 {#if !mostrarContenido}
@@ -263,7 +240,7 @@
             {#each filtrarProductos() as item}
               <div class="col-md-3">
                 <article class="card h-100 shadow-sm border-0">
-                  <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} class="img-fluid rounded" loading="lazy" style="max-height: 300px;" />
+                  <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} class="img-fluid rounded" loading="lazy" />
                   <div class="card-body text-center">
                     <h5 class="card-title text-dark fw-semibold">{item.PROD_NOMBRE}</h5>
                     <p class="card-text fw-bold">${parseFloat(item.PROD_PRECIO).toFixed(2)}</p>
