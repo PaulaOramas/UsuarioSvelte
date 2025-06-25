@@ -65,34 +65,50 @@
 
 
 <style>
+  body.dark-mode {
+    background: #23172b !important;
+    color: #f3e9ff !important;
+  }
   .historia-fondo {
-    background-color: #4c145c;
+    background-color: #4B2563;
     padding: 1rem 1.5rem;
     border-radius: 15px;
     margin-bottom: 1.5rem;
     color: white !important;
     text-align: center;
+    box-shadow: 0 4px 24px #4b256340;
   }
   .card-producto {
     display: flex;
     align-items: center;
     gap: 2rem;
     border-radius: 15px;
-    background: white;
+    background: #fff;
     padding: 1.5rem 2rem;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 12px rgba(75,37,99,0.08);
     width: 100%;
     max-width: 900px;
     box-sizing: border-box;
-    color: black;
+    color: #222;
     margin: auto;
     margin-bottom: 1.5rem;
+    transition: background 0.2s, color 0.2s;
+  }
+  body.dark-mode .card-producto {
+    background: #2d1d3a;
+    color: #f3e9ff;
   }
   .card-producto img {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
-    border-radius: 15px;
+    border-radius: 18px;
+    background: #f3e9ff;
+    box-shadow: 0 2px 8px #4b256320;
+    transition: transform 0.2s;
+  }
+  .card-producto img:hover {
+    transform: scale(1.04);
   }
   .info-producto {
     flex: 1;
@@ -102,42 +118,91 @@
     gap: 0.4rem;
   }
   .info-producto h5 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: #4B2563;
+  }
+  body.dark-mode .info-producto h5 {
+    color: #e0cfff;
   }
   .precio {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    color: #111;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
-    margin-bottom: 1rem;
+    color: #7c3aed;
+    margin-bottom: 0.5rem;
   }
- 
   .subtotal {
     font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    color: #4B2563;
+  }
+  body.dark-mode .subtotal {
+    color: #e0cfff;
+  }
+  .acciones-carrito button {
     font-size: 1.2rem;
-    margin-top: 0.75rem;
+    min-width: 38px;
+    min-height: 38px;
+    border-radius: 50%;
+    margin: 0 0.2rem;
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s;
   }
   .btn-eliminar {
     color: #dc3545;
     border-color: #dc3545;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.7rem;
   }
   .btn-eliminar:hover {
     background-color: #dc3545;
     color: white;
   }
   #opcionesPago {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    color: black;
+    color: #4B2563;
     margin-top: 2rem;
     text-align: right;
+    background: #f3e9ff;
+    border-radius: 1rem;
+    padding: 1.2rem 2rem;
+    box-shadow: 0 2px 8px #4b256320;
+  }
+  body.dark-mode #opcionesPago {
+    background: #2d1d3a;
+    color: #e0cfff;
+    box-shadow: 0 2px 8px #0004;
   }
   #opcionesPago button,
   #opcionesPago a {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     padding: 0.5rem 1.5rem;
+    border-radius: 0.7rem;
+    margin-top: 1rem;
+  }
+  .btn-modo-oscuro {
+    background: #fff;
+    border: 2px solid #4B2563;
+    color: #4B2563;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 8px #4b256320;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    cursor: pointer;
+  }
+  .btn-modo-oscuro:hover {
+    background: #4B2563;
+    color: #fff;
+    border-color: #7c3aed;
   }
   @media (max-width: 576px) {
     .card-producto {
@@ -149,28 +214,33 @@
     }
     .card-producto img {
       width: 100% !important;
-      max-width: 250px;
+      max-width: 300px;
       height: auto !important;
       margin: 0 auto;
       display: block;
     }
     #opcionesPago {
       text-align: center;
+      padding: 1rem 0.5rem;
     }
   }
 </style>
 
-<div class="container mt-2 mb-2">
-  <div class="row">
-    <div class="col-12 d-flex">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="darkModeSwitch" aria-label="Activar modo oscuro" bind:checked={darkMode} on:change={() => setDarkMode(darkMode)}>
-        <label class="form-check-label text-dark" for="darkModeSwitch" id="darkModeLabel">{darkMode ? 'Modo Claro' : 'Modo Oscuro'}</label>
-      </div>
-    </div>
-  </div>
-</div>
 
+<div class="d-flex justify-content-end align-items-center gap-2 mb-3">
+  <button
+    class="btn-modo-oscuro"
+    aria-label="Cambiar modo oscuro/claro"
+    on:click={() => setDarkMode(!darkMode)}
+    title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+  >
+    {#if darkMode}
+      <i class="bi bi-sun-fill"></i>
+    {:else}
+      <i class="bi bi-moon-stars-fill"></i>
+    {/if}
+  </button>
+</div>
 
 <main class="container mt-5 mb-5">
   <section class="historia-fondo text-center p-3 rounded-4 mb-4 shadow-sm btn-outline-light">

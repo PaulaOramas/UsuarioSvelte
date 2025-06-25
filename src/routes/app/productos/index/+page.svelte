@@ -187,11 +187,21 @@
   </section>
 
   <div id="main-content" class="visible">
-    <!-- Switch de Modo Oscuro/Claro -->
-    <div class="form-check form-switch ms-3 my-2">
-      <input class="form-check-input" type="checkbox" id="darkModeSwitch" aria-label="Activar modo oscuro" bind:checked={darkMode} on:change={() => setDarkMode(darkMode)} />
-      <label class="form-check-label text-light" for="darkModeSwitch" id="darkModeLabel">{darkMode ? 'Modo Claro' : 'Modo Oscuro'}</label>
+    <div class="d-flex justify-content-end align-items-center gap-2 mt-2 me-3">
+      <button
+        class="btn-modo-oscuro"
+        aria-label="Cambiar modo oscuro/claro"
+        on:click={() => setDarkMode(!darkMode)}
+        title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+      >
+        {#if darkMode}
+          <i class="bi bi-sun-fill"></i>
+        {:else}
+          <i class="bi bi-moon-stars-fill"></i>
+        {/if}
+      </button>
     </div>
+
 
     <div class="filtros-container d-flex gap-2 my-3">
       <select
@@ -214,7 +224,7 @@
     </div>
 
     <main class="container">
-      <h2>Catálogo de Productos</h2>
+      <h2 class="catalogo-titulo mb-4">Catálogo de Productos</h2>
       {#if mensajeError}
         <div class="alert alert-danger">{mensajeError}</div>
       {:else}
