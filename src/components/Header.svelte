@@ -27,40 +27,79 @@
 </script>
 
 <style>
+  nav.navbar {
+    background: linear-gradient(90deg, #fff 0%, #ece6f3 50%, #fff 100%);
+    box-shadow: 0 2px 12px #0001;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 2px solid #4B2563;
+  }
+  .navbar-brand span {
+    font-family: 'Montserrat', sans-serif;
+    color: #4B2563;
+    letter-spacing: 1.5px;
+    font-size: 2rem;
+    font-weight: 800;
+    text-shadow: 0 2px 8px #e0d2ee;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
   .nav-link {
-    color: #4b145b !important;
-    font-weight: 700 !important;
-    font-family: 'Raleway', sans-serif !important;
+    color: #4B2563 !important;
+    font-weight: 600 !important;
+    font-family: 'Montserrat', sans-serif !important;
     letter-spacing: 0.5px;
-    transition: color 0.25s ease;
+    font-size: 1.08rem;
+    transition: color 0.25s, background 0.25s;
+    border-radius: 0.5em;
+    padding: 0.4em 1em;
   }
   .nav-link:hover,
   .nav-link:focus {
-    color: #333;
-    text-decoration: underline;
+    color: #fff !important;
+    background: #4B2563 !important;
+    text-decoration: none;
     outline: none;
-  }
-  @media (max-width: 991.98px) {
-    .dropdown-divider {
-      border-color: #666;
-    }
   }
   .carrito-indicator {
     position: absolute;
-    top: 0;
-    left: 1.2em;
+    top: -0.5em;
+    left: 1.5em;
     font-size: 0.8em;
-    background: #dc3545;
+    background: #7c3aed;
     color: #fff;
     border-radius: 50%;
-    padding: 0 6px;
-    min-width: 18px;
-    height: 18px;
+    padding: 0 7px;
+    min-width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
     border: 2px solid #fff;
+    box-shadow: 0 2px 8px #0002;
+  }
+  .fw-semibold.text-dark {
+    font-family: 'Montserrat', sans-serif;
+    color: #4B2563 !important;
+    font-size: 1.1rem;
+    margin-left: 0.5em;
+    font-weight: 700;
+    text-shadow: 0 2px 8px #e0d2ee;
+    letter-spacing: 1px;
+  }
+  .navbar-toggler {
+    border-color: #4B2563;
+  }
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(75,37,99,0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+  @media (max-width: 991.98px) {
+    .dropdown-divider {
+      border-color: #4B2563;
+    }
+    .navbar-brand span {
+      font-size: 1.3rem;
+    }
   }
 </style>
 
