@@ -485,6 +485,20 @@ main.container {
     color: #fff;
   }
 
+  .modal-body table th {
+  background: #6b1e25 !important;
+  color: #fff !important;
+  font-weight: bold;
+  font-size: 1.08rem;
+  border: none;
+}
+.modal-body table td {
+  color: #333;
+  font-size: 1rem;
+  background: #fff;
+  border: none;
+}
+
   @media (max-width: 600px) {
   main.container {
     padding: 1rem 0.2rem;
