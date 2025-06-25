@@ -58,10 +58,41 @@
     <img src="/imagenes/logo.png" alt="Logo Trago Loco" id="logo" class="mb-3" style="max-width:120px;" />
     <h2 class="mb-4 text-center">Cuéntanos: ¿Cuándo naciste?</h2>
     <form on:submit|preventDefault={verificarEdad} id="formEdad">
+      <!-- Cambia los inputs así: -->
       <div class="d-flex gap-2 mb-3 justify-content-center">
-        <input type="number" bind:value={anio} class="form-control text-center" placeholder="AAAA" required min="1900" max="2099" style="max-width:90px;" />
-        <input type="number" bind:value={mes} class="form-control text-center" placeholder="MM" required min="1" max="12" style="max-width:70px;" />
-        <input type="number" bind:value={dia} class="form-control text-center" placeholder="DD" required min="1" max="31" style="max-width:70px;" />
+        <input
+          type="number"
+          bind:value={anio}
+          class="form-control text-center input-fecha"
+          placeholder="AAAA"
+          required
+          min="1900"
+          max="2099"
+          maxlength="4"
+          on:input={e => anio = e.target.value.slice(0, 4)}
+        />
+        <input
+          type="number"
+          bind:value={mes}
+          class="form-control text-center input-fecha"
+          placeholder="MM"
+          required
+          min="1"
+          max="12"
+          maxlength="2"
+          on:input={e => mes = e.target.value.slice(0, 2)}
+        />
+        <input
+          type="number"
+          bind:value={dia}
+          class="form-control text-center input-fecha"
+          placeholder="DD"
+          required
+          min="1"
+          max="31"
+          maxlength="2"
+          on:input={e => dia = e.target.value.slice(0, 2)}
+        />
       </div>
       <button type="submit" class="btn-verificar w-100">Entrar</button>
     </form>
@@ -141,5 +172,26 @@
   #logo {
     display: block;
     margin: 0 auto 1rem auto;
+  }
+  .input-fecha {
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1.5px solid #4B2563;
+    background: #f8f5fc;
+    color: #4B2563;
+    box-shadow: 0 1px 4px #4b256320;
+    transition: border 0.2s, box-shadow 0.2s;
+    max-width: 90px;
+  }
+  .input-fecha:focus {
+    border-color: #6f42c1;
+    box-shadow: 0 2px 8px #6f42c140;
+    outline: none;
+    background: #fff;
+  }
+  @media (max-width: 400px) {
+    .input-fecha { font-size: 1rem; max-width: 60px; }
+    #form-wrapper { padding: 1.2rem 0.5rem; }
   }
 </style>
