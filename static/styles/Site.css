@@ -21,7 +21,11 @@ body {
     }
 
 .fondo-crema {
-    background-color: #F5F5DC !important; /* Color crema */
+    background: #d1a11114 !important;
+    border-radius: 2rem 2rem 0 0;
+    box-shadow: 0 -4px 24px #0002;
+    padding-top: 2rem;
+    min-height: 80vh;
 }
 
 
@@ -733,7 +737,7 @@ section.mb-5 p {
 
 body {
     font-family: 'Georgia', serif;
-    background: #fff8f0;
+    background: #fff8f0; /* O tu cremita favorito */
     color: #4b145b;
     margin: 0;
     padding: 0;
@@ -925,3 +929,4 @@ body {
 .table-bordered td {
     color: black;
 }
+

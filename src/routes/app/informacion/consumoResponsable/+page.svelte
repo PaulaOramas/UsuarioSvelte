@@ -44,28 +44,26 @@
   }
 </script>
 
-<!-- Bootstrap y CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="/css/oscuro.css" rel="stylesheet" />
-<link href="/css/Site.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
-
-<div class="container mt-3 mb-2">
-  <div class="row">
-    <div class="col-12 d-flex">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="darkModeSwitch" aria-label="Activar modo oscuro" bind:checked={darkMode} on:change={() => setDarkMode(darkMode)}>
-        <label class="form-check-label text-dark" for="darkModeSwitch">{darkMode ? 'Modo Claro' : 'Modo Oscuro'}</label>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="container mt-5 mb-5">
   <h1 class="fw-bold text-center mb-4" style="font-family: 'Pacifico', cursive; color: #6b1e25;">
     Consumo Responsable
   </h1>
+
+  <div class="d-flex justify-content-end align-items-center gap-2 mb-3" style="max-width:900px;margin:auto;">
+    <button
+      class="btn-modo-oscuro"
+      aria-label="Cambiar modo oscuro/claro"
+      on:click={() => setDarkMode(!darkMode)}
+      title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+    >
+      {#if darkMode}
+        <i class="bi bi-sun-fill"></i>
+      {:else}
+        <i class="bi bi-moon-stars-fill"></i>
+      {/if}
+    </button>
+  </div>
+
   <div class="row g-4" id="bloquesResponsables">
     {#each mensajes as mensaje}
       <div class="col-md-6 col-lg-6">
@@ -95,5 +93,25 @@
   }
   h1 {
     letter-spacing: 1.2px;
+  }
+  .btn-modo-oscuro {
+    background: #fff;
+    border: 2px solid #4B2563;
+    color: #4B2563;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 2px 8px #4b256320;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    cursor: pointer;
+  }
+  .btn-modo-oscuro:hover {
+    background: #4B2563;
+    color: #fff;
+    border-color: #7c3aed;
   }
 </style>

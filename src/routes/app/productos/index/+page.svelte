@@ -167,6 +167,10 @@
   .video-inicio { width: 100%; max-height: 350px; object-fit: cover; border-radius: 1rem; }
   .btn-morado { background: #6f42c1; color: #fff; }
   .btn-morado:hover { background: #5936a6; }
+  .fondo-crema {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+  }
 </style>
 
 {#if !mostrarContenido}
@@ -187,7 +191,7 @@
     </div>
   </section>
 
-  <div id="main-content" class="visible">
+  <div id="main-content" class="visible fondo-crema">
     <div class="d-flex justify-content-end align-items-center gap-2 mt-2 me-3">
       <button
         class="btn-modo-oscuro"
