@@ -66,12 +66,12 @@
   }
 
   function agregarAlCarrito(producto) {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-    let existente = carrito.find(p => p.PROD_ID === producto.PROD_ID);
+    let carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
+    let existente = carritoActual.find(p => p.PROD_ID === producto.PROD_ID);
     if (existente) {
       existente.Cantidad = (existente.Cantidad || 1) + 1;
     } else {
-      carrito.push({
+      carritoActual.push({
         PROD_ID: parseInt(producto.PROD_ID),
         PROD_NOMBRE: producto.PROD_NOMBRE,
         PROD_PRECIO: parseFloat(producto.PROD_PRECIO),
@@ -79,7 +79,8 @@
         Cantidad: 1
       });
     }
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+    localStorage.setItem("carrito", JSON.stringify(carritoActual));
+    carrito.set(carritoActual); // Actualiza el store de Svelte
     mostrarAlerta("Producto agregado al carrito");
     // Si quieres redirigir al carrito, descomenta la siguiente línea:
     // goto('/app/carrrito');

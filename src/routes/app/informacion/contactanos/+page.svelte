@@ -1,7 +1,22 @@
 <script>
   import { onMount } from 'svelte';
 
+  // Modo oscuro
   let darkMode = false;
+  onMount(() => {
+    darkMode = localStorage.getItem('dark-mode') === 'enabled';
+    setDarkMode(darkMode);
+  });
+  function setDarkMode(enabled) {
+    darkMode = enabled;
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('dark-mode', 'enabled');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('dark-mode', 'disabled');
+    }
+  }
 
   // Preguntas frecuentes (puedes editar o agregar más)
   let faqs = [
@@ -22,6 +37,7 @@
       respuesta: "No, para realizar compras debes crear una cuenta. Esto nos ayuda a garantizar una entrega segura."
     }
   ];
+  let faqOpen = null; // Para controlar el acordeón
 
   // Formulario de contacto
   let nombre = '';
@@ -29,22 +45,6 @@
   let mensaje = '';
   let mensajeAlerta = '';
   let tipoAlerta = '';
-
-  onMount(() => {
-    darkMode = localStorage.getItem('dark-mode') === 'enabled';
-    setDarkMode(darkMode);
-  });
-
-  function setDarkMode(enabled) {
-    darkMode = enabled;
-    if (darkMode) {
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('dark-mode', 'enabled');
-    } else {
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('dark-mode', 'disabled');
-    }
-  }
 
   function enviarContacto(e) {
     e.preventDefault();
@@ -62,11 +62,11 @@
   }
 </script>
 
-<!-- Bootstrap & CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+
 
 <div class="container mt-3 mb-2">
   <div class="row">
@@ -90,11 +90,22 @@
           {#each faqs as item, index}
             <div class="accordion-item faq-card">
               <h2 class="accordion-header" id={"faq" + index}>
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={"#collapse" + index} aria-expanded="false" aria-controls={"collapse" + index}>
+                <button
+                  class="accordion-button {faqOpen === index ? '' : 'collapsed'}"
+                  type="button"
+                  aria-expanded={faqOpen === index}
+                  aria-controls={"collapse" + index}
+                  on:click={() => faqOpen = faqOpen === index ? null : index}
+                >
                   {item.pregunta}
                 </button>
               </h2>
-              <div id={"collapse" + index} class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div
+                id={"collapse" + index}
+                class="accordion-collapse collapse {faqOpen === index ? 'show' : ''}"
+                aria-labelledby={"faq" + index}
+                data-bs-parent="#faqAccordion"
+              >
                 <div class="accordion-body">{item.respuesta}</div>
               </div>
             </div>

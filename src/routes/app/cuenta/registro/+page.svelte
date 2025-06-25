@@ -15,15 +15,6 @@
   let mostrarContrasena = false;
 
   // Validaciones y mensajes
-  let cedulaError = '';
-  let nombreError = '';
-  let emailError = '';
-  let contrasenaError = '';
-  let telefonoError = '';
-  let generoError = '';
-  let ciudadError = '';
-  let sectorError = '';
-  let direccionError = '';
   let mensajeError = '';
   let mensajeExito = '';
 
@@ -35,24 +26,23 @@
   };
   let sectores = [];
 
-  // Actualiza sectores cuando cambia la ciudad
   $: sectores = ciudad && sectoresPorCiudad[ciudad] ? sectoresPorCiudad[ciudad] : [];
-
-  // Validaciones reactivas
-  $: {
-    cedulaError = (!cedula.match(/^\d{10}$|^\d{13}$/)) && cedula ? '❌ La cédula o RUC debe ser solo numérica y tener 10 o 13 dígitos.' : '';
-    nombreError = (!nombre.match(/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/)) && nombre ? '❌ El nombre solo puede contener letras y espacios.' : '';
-    emailError = (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) && email ? '❌ El correo electrónico debe tener un formato válido.' : '';
-    contrasenaError = !contrasena && contrasena !== '' ? '❌ La contraseña es obligatoria.' : '';
-    telefonoError = (!telefono.match(/^\d{9}$/)) && telefono ? '❌ El teléfono debe tener exactamente 9 dígitos y solo números.' : '';
-    generoError = !genero && genero !== '' ? '❌ El género es obligatorio.' : '';
-    ciudadError = !ciudad && ciudad !== '' ? '❌ Debes seleccionar una ciudad.' : '';
-    sectorError = !sector && sector !== '' ? '❌ Debes seleccionar un sector.' : '';
-    direccionError = !direccion && direccion !== '' ? '❌ La dirección es obligatoria.' : '';
-  }
 
   function togglePassword() {
     mostrarContrasena = !mostrarContrasena;
+  }
+
+  function validarCampos() {
+    if (!cedula.match(/^\d{10}$|^\d{13}$/)) return 'La cédula o RUC debe tener 10 o 13 dígitos.';
+    if (!nombre.match(/^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s]+$/)) return 'El nombre solo puede contener letras y espacios.';
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) return 'El correo electrónico debe tener un formato válido.';
+    if (!contrasena) return 'La contraseña es obligatoria.';
+    if (!telefono.match(/^\d{9}$/)) return 'El teléfono debe tener exactamente 9 dígitos.';
+    if (!genero) return 'El género es obligatorio.';
+    if (!ciudad) return 'Debes seleccionar una ciudad.';
+    if (!sector) return 'Debes seleccionar un sector.';
+    if (!direccion) return 'La dirección es obligatoria.';
+    return '';
   }
 
   async function registrar(e) {
@@ -60,17 +50,12 @@
     mensajeError = '';
     mensajeExito = '';
 
-    // Validación final antes de enviar
-    if (
-      cedulaError || nombreError || emailError || contrasenaError ||
-      telefonoError || generoError || ciudadError || sectorError || direccionError ||
-      !cedula || !nombre || !email || !contrasena || !telefono || !genero || !ciudad || !sector || !direccion
-    ) {
-      mensajeError = 'Por favor, completa correctamente todos los campos.';
+    const error = validarCampos();
+    if (error) {
+      mensajeError = error;
       return;
     }
 
-    // Construir DTO para API
     const usuarioDTO = {
       USU_CI_RUC: cedula,
       USU_NOMBRE: nombre,
@@ -115,6 +100,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Pacifico&display=swap" rel="stylesheet" />
 
+
 <main class="registro-main">
   <h2>📝 Crear Cuenta</h2>
 
@@ -131,12 +117,8 @@
       <input id="cedula" name="cedula" type="text" class="form-control" maxlength="13"
         bind:value={cedula}
         pattern="\d{10,13}"
-        title="Ingrese un número válido (10 a 13 dígitos)"
         placeholder="Ej. 0912345678"
-        required
-        aria-describedby="cedulaHelp" />
-      <div id="cedulaHelp" class="form-text text-muted">Ingrese su cédula o RUC (10 a 13 dígitos).</div>
-      {#if cedulaError}<div class="mensaje-error">{cedulaError}</div>{/if}
+        required />
     </div>
 
     <div class="mb-3">
@@ -145,7 +127,6 @@
         bind:value={nombre}
         placeholder="Tu nombre completo"
         required />
-      {#if nombreError}<div class="mensaje-error">{nombreError}</div>{/if}
     </div>
 
     <div class="mb-3">
@@ -154,7 +135,6 @@
         bind:value={email}
         placeholder="ejemplo@correo.com"
         required />
-      {#if emailError}<div class="mensaje-error">{emailError}</div>{/if}
     </div>
 
     <div class="mb-3 position-relative">
@@ -181,7 +161,6 @@
           </svg>
         </button>
       </div>
-      {#if contrasenaError}<div class="mensaje-error">{contrasenaError}</div>{/if}
     </div>
 
     <div class="mb-3">
@@ -194,7 +173,6 @@
           placeholder="Ej. 991234567"
           required />
       </div>
-      {#if telefonoError}<div class="mensaje-error">{telefonoError}</div>{/if}
     </div>
 
     <div class="mb-3">
@@ -205,7 +183,6 @@
         <option>Femenino</option>
         <option>Otro</option>
       </select>
-      {#if generoError}<div class="mensaje-error">{generoError}</div>{/if}
     </div>
 
     <div class="mb-3">
@@ -216,7 +193,6 @@
         <option value="Guayaquil">Guayaquil</option>
         <option value="Cuenca">Cuenca</option>
       </select>
-      {#if ciudadError}<div class="mensaje-error">{ciudadError}</div>{/if}
     </div>
 
     <div class="mb-3">
@@ -227,7 +203,6 @@
           <option value={s}>{s}</option>
         {/each}
       </select>
-      {#if sectorError}<div class="mensaje-error">{sectorError}</div>{/if}
     </div>
 
     <div class="mb-3">
@@ -236,7 +211,6 @@
         bind:value={direccion}
         placeholder="Tu Dirección"
         required />
-      {#if direccionError}<div class="mensaje-error">{direccionError}</div>{/if}
     </div>
 
     <button type="submit">Registrarse</button>
@@ -302,12 +276,5 @@
     color: #fff;
     outline: none;
     box-shadow: 0 0 20px #a44b5aaa;
-  }
-  .mensaje-error {
-    font-weight: 700;
-    font-size: 1rem;
-    color: #b2313b;
-    margin-bottom: 1rem;
-    display: block;
   }
 </style>
