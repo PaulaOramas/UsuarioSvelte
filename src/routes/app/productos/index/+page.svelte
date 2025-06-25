@@ -98,6 +98,60 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
 <style>
+  .hero-video-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+  }
+  .hero-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.85);
+  }
+  .hero-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgba(0,0,0,0.25);
+    text-shadow: 0 2px 8px #0008;
+    z-index: 2;
+  }
+  .hero-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 3rem;
+    margin-bottom: 0.5em;
+    letter-spacing: 2px;
+  }
+  .hero-subtitle {
+    font-size: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+  #main-content {
+    margin-top: -5vh;
+    background: #fff;
+    border-radius: 2rem 2rem 0 0;
+    box-shadow: 0 -4px 24px #0002;
+    padding-top: 2rem;
+    min-height: 80vh;
+  }
+  @media (max-width: 768px) {
+    .hero-title { font-size: 2rem; }
+    .hero-subtitle { font-size: 1rem; }
+    #main-content { border-radius: 1rem 1rem 0 0; }
+  }
+
   #main-content { display: none; }
   #main-content.visible { display: block; }
   #puzzle-overlay {
@@ -119,12 +173,20 @@
 {/if}
 
 {#if mostrarContenido}
-  <div id="main-content" class="visible">
-    <video class="video-inicio" autoplay muted loop playsinline preload="auto">
+  <!-- HERO VIDEO -->
+  <section class="hero-video-container">
+    <video class="hero-video" autoplay muted loop playsinline preload="auto">
       <source src="/imagenes/GIN COCKTAIL B ROLL.mp4" type="video/mp4" />
       Tu navegador no soporta video HTML5.
     </video>
+    <div class="hero-overlay">
+      <h1 class="hero-title">Bienvenido a El Trago Loco</h1>
+      <p class="hero-subtitle">Descubre los mejores cócteles y productos exclusivos</p>
+      <a href="#main-content" class="btn btn-morado btn-lg mt-4 shadow">Ver catálogo</a>
+    </div>
+  </section>
 
+  <div id="main-content" class="visible">
     <!-- Switch de Modo Oscuro/Claro -->
     <div class="form-check form-switch ms-3 my-2">
       <input class="form-check-input" type="checkbox" id="darkModeSwitch" aria-label="Activar modo oscuro" bind:checked={darkMode} on:change={() => setDarkMode(darkMode)} />
