@@ -18,12 +18,17 @@
   let mensajeLogin = '';
   let mostrarMensajeLogin = false;
 
+  // Modo oscuro
+  let darkMode = false;
+
   // Cargar usuario y perfil al montar
   onMount(async () => {
     usuarioActual = localStorage.getItem('usuario') || '';
     if (usuarioActual) {
       await cargarPerfil();
     }
+    darkMode = localStorage.getItem('dark-mode') === 'enabled';
+    setDarkMode(darkMode);
   });
 
   async function cargarPerfil() {
@@ -140,8 +145,37 @@
   function imprimirFactura() {
   window.print();
 }
+
+
+
+function setDarkMode(enabled) {
+  darkMode = enabled;
+  if (darkMode) {
+    document.body.classList.add('dark-mode');
+    localStorage.setItem('dark-mode', 'enabled');
+  } else {
+    document.body.classList.remove('dark-mode');
+    localStorage.setItem('dark-mode', 'disabled');
+  }
+}
 </script>
 
+
+<!-- Botón de modo oscuro/claro alineado más a la derecha -->
+<div class="d-flex justify-content-end align-items-center gap-2 mb-3 me-3" style="max-width:100%;">
+  <button
+    class="btn-modo-oscuro"
+    aria-label="Cambiar modo oscuro/claro"
+    on:click={() => setDarkMode(!darkMode)}
+    title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+  >
+    {#if darkMode}
+      <i class="bi bi-sun-fill"></i>
+    {:else}
+      <i class="bi bi-moon-stars-fill"></i>
+    {/if}
+  </button>
+</div>
 
 <main class="container my-5 p-4 rounded shadow bg-white">
   <h1 class="text-center mb-4 titulo-principal">Perfil de Usuario</h1>
@@ -243,6 +277,8 @@
       </form>
     </div>
   {/if}
+
+  
 
   {#if mostrarModal}
     <div
