@@ -81,22 +81,20 @@
     }
     localStorage.setItem("carrito", JSON.stringify(carritoActual));
     carrito.set(carritoActual); // Actualiza el store de Svelte
-    mostrarAlerta("Producto agregado al carrito");
+    mostrarAlerta("¡Se agregó correctamente al carrito!");
     // Si quieres redirigir al carrito, descomenta la siguiente línea:
     // goto('/app/carrrito');
   }
 
   function mostrarAlerta(msg, duracion = 3000) {
-    alerta = msg;
+    alerta = msg; // Esto sí funciona, pero asegúrate de que NO tienes otra variable 'alerta' en otro scope
     clearTimeout(alertaTimeout);
-    alertaTimeout = setTimeout(() => alerta = '', duracion);
+    alertaTimeout = setTimeout(() => {
+      alerta = '';
+    }, duracion);
   }
 </script>
 
-<!-- Bootstrap y CSS globales -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
 <style>
   .hero-video-container {

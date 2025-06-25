@@ -595,8 +595,8 @@ body.dark-mode textarea.form-control {
 }
 
 body.dark-mode .form-control:focus,
-body.dark-mode input:focus,
-body.dark-mode select:focus,
+body.dark_mode input:focus,
+body.dark_mode select:focus,
 body.dark-mode textarea.form-control:focus {
     background-color: #232323 !important;
     border-color: #ffb6c1 !important;
@@ -894,6 +894,11 @@ body.dark-mode a.text-danger {
     color: #ffb6c1 !important;
 }
 body.dark-mode a:hover {
+    color: #fff !important;
+}
+
+body.dark-mode .historia-texto,
+body.dark-mode .historia-texto p {
     color: #fff !important;
 }
 

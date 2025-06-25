@@ -148,7 +148,7 @@
 
   {#if usuarioActual && usuarioData}
     <h2 class="mb-3 sub-titulo text-center">Datos Personales</h2>
-    <div class="row gx-5 g-3">
+    <div class="row gx-5 g-3 datos-personales">
       <div class="col-md-6 text-start">
         <div class="mb-2"><span class="fw-bold">Cédula/RUC:</span> <span class="text-dark">{usuarioData.USU_CI_RUC}</span></div>
         <div class="mb-2"><span class="fw-bold">Nombre:</span> <span class="text-dark">{usuarioData.USU_NOMBRE}</span></div>
@@ -292,17 +292,34 @@
 </main>
 
 <style>
+  body {
+  background: #fff8f0;
+}
+
+main.container {
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px #a44b5a22;
+  padding: 2.5rem 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
   body.fondo-crema {
     background-color: #f8f9fa;
   }
   .titulo-principal {
     font-family: 'Pacifico', cursive;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #6b1e25;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1.5px;
   }
   .sub-titulo {
-    color: #6b1e25;
-    font-weight: bold;
+    color: #a44b5a;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
   }
   .btn-outline-morado {
     border-color: #6b1e25;
@@ -383,12 +400,24 @@
     box-shadow: 0 0 12px #a44b5aaa;
   }
   a {
-    color: #6b1e25;
-    text-decoration: none;
+    color: #a44b5a;
+    text-decoration: underline;
     font-weight: 600;
   }
   a:hover {
-    color: #a44b5a;
+    color: #6b1e25;
+  }
+  .btn-danger {
+    background: #a44b5a;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .btn-danger:hover {
+    background: #6b1e25;
   }
   .alert {
     margin-top: 1rem;
@@ -400,4 +429,68 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
   }
+  .datos-personales .fw-bold {
+    color: #6b1e25;
+  }
+  .datos-personales span.text-dark {
+    color: #333 !important;
+  }
+  .datos-personales {
+    margin-bottom: 2rem;
+    font-size: 1.08rem;
+  }
+  .table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 12px #a44b5a22;
+  }
+
+  .table thead {
+    background: #6b1e25;
+  }
+
+  .table thead th {
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1.08rem;
+    border: none;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f8f9fa;
+  }
+
+  .table-striped tbody tr:nth-of-type(even) {
+    background-color: #fff8f0;
+  }
+
+  .table td, .table th {
+    border: none;
+    vertical-align: middle;
+  }
+
+  .btn-outline-morado {
+    border-color: #a44b5a;
+    color: #a44b5a;
+    background-color: transparent;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+    border-radius: 8px;
+    padding: 0.3rem 1.1rem;
+  }
+
+  .btn-outline-morado:hover {
+    background-color: #a44b5a;
+    color: #fff;
+  }
+
+  @media (max-width: 600px) {
+  main.container {
+    padding: 1rem 0.2rem;
+  }
+  .login-container {
+    padding: 1.2rem 0.5rem;
+  }
+}
 </style>
