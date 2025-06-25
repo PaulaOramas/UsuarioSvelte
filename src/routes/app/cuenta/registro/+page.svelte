@@ -114,8 +114,6 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Pacifico&display=swap" rel="stylesheet" />
-<link href="/css/oscuro.css" rel="stylesheet" />
-<link href="/css/Site.css" rel="stylesheet" />
 
 <main class="registro-main">
   <h2>📝 Crear Cuenta</h2>

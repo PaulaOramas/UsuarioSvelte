@@ -67,8 +67,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
-<link href="/css/oscuro.css" rel="stylesheet" />
-<link href="/css/Site.css" rel="stylesheet" />
 
 <div class="container mt-3 mb-2">
   <div class="row">
