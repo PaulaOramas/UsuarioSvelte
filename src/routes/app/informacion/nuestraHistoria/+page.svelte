@@ -154,13 +154,50 @@
     margin-bottom: 1rem;
   }
   @media (max-width: 768px) {
-    .creadores {
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .historia-wrapper {
-      padding: 1.2rem 0.5rem;
-    }
+  .historia-wrapper {
+    padding: 0.7rem 0.2rem;
+    margin: 1rem 0.2rem;
+    max-width: 100%;
+    border-radius: 1rem;
   }
+  .creadores {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .creador-card {
+    min-width: 0;
+    max-width: 95vw;
+    width: 100%;
+    padding: 1rem 0.5rem;
+    border-radius: 0.8rem;
+  }
+  .creador-card img {
+    width: 90px !important;
+    height: 90px !important;
+    margin-bottom: 0.7rem;
+  }
+  .creador-card h3 {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+  .creador-card p {
+    font-size: 0.98rem;
+  }
+  .historia-texto h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.7rem;
+  }
+  .historia-texto p {
+    font-size: 1rem;
+    margin-bottom: 0.7rem;
+  }
+  .btn-modo-oscuro {
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+  }
+}
 </style>
