@@ -136,6 +136,10 @@
       mostrarMensajeLogin = true;
     }
   }
+
+  function imprimirFactura() {
+  window.print();
+}
 </script>
 
 
@@ -284,6 +288,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" on:click={() => mostrarModal = false}>Cerrar</button>
+            <button type="button" class="btn btn-outline-morado" on:click={imprimirFactura}>Imprimir PDF</button>
           </div>
         </div>
       </div>
