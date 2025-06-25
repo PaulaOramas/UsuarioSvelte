@@ -169,6 +169,31 @@
     background-color: #f8f9fa;
     padding: 2rem 0;
   }
+
+  /* Imágenes de productos responsivas y bonitas */
+  .card img,
+  .img-fluid {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    object-fit: contain;
+    background: #fff8f0;
+    padding: 0.5rem;
+    display: block;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .card img,
+    .img-fluid {
+      max-height: 140px;
+      padding: 0.3rem;
+    }
+    .col-md-3 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
 </style>
 
 {#if !mostrarContenido}

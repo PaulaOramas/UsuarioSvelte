@@ -24,6 +24,15 @@
   function irCarrito() {
     goto('/app/carrrito');
   }
+
+  function cerrarMenu() {
+    const navbar = document.getElementById('navbarNav');
+    if (navbar && navbar.classList.contains('show')) {
+      // Bootstrap 5 usa Collapse
+      const collapse = bootstrap.Collapse.getOrCreateInstance(navbar);
+      collapse.hide();
+    }
+  }
 </script>
 
 <style>
@@ -94,11 +103,30 @@
     background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(75,37,99,0.7)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
   }
   @media (max-width: 991.98px) {
-    .dropdown-divider {
-      border-color: #4B2563;
+    .navbar-collapse {
+      background: #fff;
+      border-radius: 0 0 1rem 1rem;
+      box-shadow: 0 8px 24px #4b256320;
+      padding: 1rem 0.5rem;
     }
-    .navbar-brand span {
-      font-size: 1.3rem;
+    .navbar-nav .nav-item {
+      margin-bottom: 0.5rem;
+    }
+    .navbar-nav .nav-link {
+      color: #4B2563 !important;
+      background: none !important;
+      border-radius: 0.5em;
+      padding: 0.7em 1em;
+      font-size: 1.1rem;
+      text-align: left;
+    }
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+      background: #4B2563 !important;
+      color: #fff !important;
+    }
+    .dropdown-divider {
+      margin: 0.5rem 0;
     }
   }
 </style>
@@ -125,7 +153,7 @@
           </button>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/app/informacion/nuestraHistoria">Nuestra Historia</a>
+          <a class="nav-link" href="/app/informacion/nuestraHistoria" on:click={(e) => { e.preventDefault(); cerrarMenu(); goto('/app/informacion/nuestraHistoria'); }}>Nuestra Historia</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/app/informacion/consumoResponsable">Consumo Responsable</a>
@@ -135,7 +163,7 @@
         </li>
         <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2" /></li>
         <li class="nav-item position-relative">
-          <button class="nav-link btn btn-link p-0" style="text-decoration:none; position:relative;" aria-label="Ver carrito" on:click={irCarrito}>
+          <button class="nav-link btn btn-link p-0" style="text-decoration:none; position:relative;" aria-label="Ver carrito" on:click={() => { cerrarMenu(); irCarrito(); }}>
             🛒
             {#if carritoCantidad > 0}
               <span class="carrito-indicator">{carritoCantidad}</span>

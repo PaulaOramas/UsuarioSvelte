@@ -358,82 +358,101 @@ main.container {
     border: 1px solid #6b1e25;
   }
   .login-container {
-    background: #fff;
-    padding: 2rem 2.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 10px 30px rgba(107, 30, 37, 0.15);
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    margin: 3rem auto 2rem auto;
-  }
-  .login-container h2 {
-    font-family: 'Pacifico', cursive;
-    color: #6b1e25;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-  }
-  input {
-    border: 1px solid #6b1e25;
-    border-radius: 8px;
-    padding: 0.8rem;
-    width: 100%;
-    margin-bottom: 1.2rem;
-    font-size: 1rem;
-  }
-  .form-text {
-    color: #6b1e25;
-    font-size: 0.9rem;
-  }
-  .btn-morado {
-    background-color: #6b1e25;
-    color: #f5f5dc;
-    font-weight: 700;
-    border-radius: 30px;
-    padding: 0.6rem 1.5rem;
-    transition: background-color 0.3s ease;
-    border: none;
-    margin-top: 1rem;
-    width: 100%;
-    cursor: pointer;
-  }
-  .btn-morado:hover,
-  .btn-morado:focus {
-    background-color: #a44b5a;
-    color: #fff;
-    outline: none;
-    box-shadow: 0 0 12px #a44b5aaa;
-  }
-  a {
-    color: #a44b5a;
-    text-decoration: underline;
-    font-weight: 600;
-  }
-  a:hover {
-    color: #6b1e25;
-  }
-  .btn-danger {
-    background: #a44b5a;
-    border: none;
-    color: #fff;
-    font-weight: 700;
-    border-radius: 8px;
-    padding: 0.5rem 1.5rem;
-    margin-top: 1.5rem;
-  }
-  .btn-danger:hover {
-    background: #6b1e25;
-  }
-  .alert {
-    margin-top: 1rem;
-    padding: 0.8rem;
-    border-radius: 10px;
-  }
-  .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }
+  background: #fff;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 32px #a44b5a22;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  margin: 3rem auto 2rem auto;
+  border: 1.5px solid #f5e6e6;
+}
+
+.login-container h2 {
+  font-family: 'Pacifico', cursive;
+  color: #6b1e25;
+  margin-bottom: 2rem;
+  font-size: 2.1rem;
+  letter-spacing: 1.2px;
+}
+
+.login-container label {
+  color: #a44b5a;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  font-size: 1.05rem;
+}
+
+.login-container input {
+  border: 1.5px solid #a44b5a;
+  border-radius: 12px;
+  padding: 0.9rem;
+  width: 100%;
+  margin-bottom: 1.1rem;
+  font-size: 1.05rem;
+  background: #fff8f0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-container input:focus {
+  border-color: #6b1e25;
+  outline: none;
+  box-shadow: 0 0 0 2px #a44b5a33;
+  background: #fff;
+}
+
+.login-container .form-text {
+  color: #a44b5a;
+  font-size: 0.92rem;
+  margin-bottom: 0.7rem;
+}
+
+.login-container .btn-morado {
+  background-color: #6b1e25;
+  color: #fff8f0;
+  font-weight: 700;
+  border-radius: 30px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px #a44b5a22;
+}
+
+.login-container .btn-morado:hover,
+.login-container .btn-morado:focus {
+  background-color: #a44b5a;
+  color: #fff;
+  box-shadow: 0 0 12px #a44b5aaa;
+}
+
+.login-container .alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  font-size: 1.02rem;
+}
+
+.login-container .mt-3 {
+  margin-top: 1.2rem !important;
+}
+
+.login-container a {
+  color: #a44b5a;
+  text-decoration: underline;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: color 0.2s;
+}
+
+.login-container a:hover {
+  color: #6b1e25;
+  text-decoration: underline;
+}
   .datos-personales .fw-bold {
     color: #6b1e25;
   }
