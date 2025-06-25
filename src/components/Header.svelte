@@ -37,7 +37,7 @@
     font-family: 'Montserrat', sans-serif;
     color: #4B2563;
     letter-spacing: 1.5px;
-    font-size: 2rem;
+    font-size: 1.2rem; /* Cambiado de 2rem a 1.2rem */
     font-weight: 800;
     text-shadow: 0 2px 8px #e0d2ee;
     text-transform: uppercase;
@@ -109,7 +109,7 @@
     <!-- Logo + Nombre -->
     <a class="navbar-brand d-flex align-items-center gap-2" href="/app/productos/index" aria-label="Ir a la página principal">
       <img src="/imagenes/logo.png" alt="Logo Trago Loco" style="height: 40px;" />
-      <span class="fs-4" style="color: #000; font-family: 'Pacifico', cursive;">Trago Loco</span>
+      <span style="color: #000; font-family: 'Pacifico', cursive;">Trago Loco</span>
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
