@@ -5,6 +5,7 @@
   let carrito = [];
   let usuario = '';
   let darkMode = false;
+  let cargandoPago = false;
 
   // Cargar carrito y usuario al montar
   onMount(() => {
@@ -45,6 +46,8 @@
       alert('❗ No tienes productos en el carrito.');
       return;
     }
+
+    cargandoPago = true; // Mostrar spinner
 
     // Obtener usuario logueado
     const cedulaUsuario = localStorage.getItem("usuario");
@@ -106,6 +109,8 @@
       }, 1000);
     } catch (error) {
       alert("❌ Error al registrar la compra: " + error.message);
+    } finally {
+      cargandoPago = false; // Ocultar spinner
     }
   }
 </script>
@@ -338,10 +343,22 @@
       <div><strong>IVA (12%):</strong> ${(carrito.reduce((sum, p) => sum + p.PROD_PRECIO * (p.Cantidad || p.CANTIDAD || 1), 0) * 0.12).toFixed(2)}</div>
       <div><strong>Total:</strong> ${(carrito.reduce((sum, p) => sum + p.PROD_PRECIO * (p.Cantidad || p.CANTIDAD || 1), 0) * 1.12).toFixed(2)}</div>
       {#if usuario}
-        <button class="btn btn-success fw-semibold mt-3" on:click={pagar}>💳 Pagar</button>
+        <button class="btn btn-success fw-semibold mt-3" on:click={pagar} disabled={cargandoPago}>
+          {#if cargandoPago}
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {/if}
+          💳 Pagar
+        </button>
       {:else}
         <a href="/app/cuenta/login" class="btn btn-warning fw-semibold mt-3">🔐 Inicia sesión para pagar</a>
       {/if}
+    </div>
+  {/if}
+
+  {#if cargandoPago}
+    <div class="text-center my-3">
+      <div class="spinner-border text-success" role="status"></div>
+      <div class="mt-2 fw-semibold">Procesando pago...</div>
     </div>
   {/if}
 </main>
