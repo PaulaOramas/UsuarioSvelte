@@ -106,9 +106,6 @@
   }
 </script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
 <style>
   #main-content { display: none; }
@@ -125,6 +122,26 @@
   .video-inicio { width: 100%; max-height: 350px; object-fit: cover; border-radius: 1rem; }
   .btn-morado { background: #6f42c1; color: #fff; }
   .btn-morado:hover { background: #5936a6; }
+  .btn-modo-oscuro {
+  background: #fff;
+  border: 2px solid #4B2563;
+  color: #4B2563;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 8px #4b256320;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  cursor: pointer;
+}
+.btn-modo-oscuro:hover {
+  background: #4B2563;
+  color: #fff;
+  border-color: #a44b5a;
+}
 </style>
 
 {#if !mostrarContenido}
@@ -138,11 +155,7 @@
       Tu navegador no soporta video HTML5.
     </video>
 
-    <!-- Switch de Modo Oscuro/Claro -->
-    <div class="form-check form-switch ms-3 my-2">
-      <input class="form-check-input" type="checkbox" id="darkModeSwitch" aria-label="Activar modo oscuro" bind:checked={darkMode} on:change={() => setDarkMode(darkMode)} />
-      <label class="form-check-label text-light" for="darkModeSwitch" id="darkModeLabel">{darkMode ? 'Modo Claro' : 'Modo Oscuro'}</label>
-    </div>
+ 
 
     <div class="filtros-container d-flex gap-2 my-3">
       <select
@@ -162,6 +175,21 @@
         aria-label="Buscar producto por nombre"
         bind:value={busqueda}
       />
+    </div>
+
+    <div class="d-flex justify-content-end align-items-center gap-2 mb-3">
+      <button
+        class="btn-modo-oscuro"
+        aria-label="Cambiar modo oscuro/claro"
+        on:click={() => setDarkMode(!darkMode)}
+        title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+      >
+        {#if darkMode}
+          <i class="bi bi-sun-fill"></i>
+        {:else}
+          <i class="bi bi-moon-stars-fill"></i>
+        {/if}
+      </button>
     </div>
 
     <main class="container">
