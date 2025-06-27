@@ -142,20 +142,111 @@
   color: #fff;
   border-color: #a44b5a;
 }
+
+.hero-video {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  border-radius: 0;
+  position: relative;
+  margin-left: calc(-1 * (100vw - 100%) / 2);
+  margin-right: calc(-1 * (100vw - 100%) / 2);
+  background: #222;
+}
+
+.video-hero {
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.7);
+}
+
+.hero-overlay {
+  z-index: 2;
+  pointer-events: none;
+  padding: 2rem 1rem;
+  background: linear-gradient(180deg,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.15) 100%);
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+}
+
+.hero-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 2.5rem;
+  text-shadow: 0 4px 24px #000a, 0 1px 0 #fff4;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-shadow: 0 2px 8px #0008;
+  color: #fff;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .hero-video, .video-hero, .hero-overlay {
+    min-height: 60vh;
+    height: 60vh;
+    max-height: 70vh;
+    border-radius: 0;
+  }
+  .hero-title {
+    font-size: 1.4rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+}
 </style>
+
+<!-- Hero con video de fondo y overlay a pantalla completa -->
+<section class="hero-video position-relative mb-0">
+  <video class="video-hero" autoplay muted loop playsinline preload="auto">
+    <source src="/imagenes/GIN COCKTAIL B ROLL.mp4" type="video/mp4" />
+    Tu navegador no soporta video HTML5.
+  </video>
+  <div class="hero-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+    <h1 class="hero-title">Bienvenido a El Trago Loco</h1>
+    <p class="hero-subtitle">Descubre los mejores cócteles y productos exclusivos</p>
+    <a href="#main-content" class="btn btn-morado btn-lg mt-4 shadow" style="pointer-events:auto;scroll-behavior:smooth;">Ver catálogo</a>
+  </div>
+</section>
 
 {#if !mostrarContenido}
   <div id="puzzle-overlay" aria-hidden="true" role="presentation"></div>
 {/if}
 
 {#if mostrarContenido}
-  <div id="main-content" class="visible">
-    <video class="video-inicio" autoplay muted loop playsinline preload="auto">
-      <source src="/imagenes/GIN COCKTAIL B ROLL.mp4" type="video/mp4" />
-      Tu navegador no soporta video HTML5.
-    </video>
-
- 
+  <!-- Contenido principal -->
+  <div id="main-content" class="visible fondo-crema">
+    <div class="d-flex justify-content-end align-items-center gap-2 mt-2 me-3">
+      <button
+        class="btn-modo-oscuro"
+        aria-label="Cambiar modo oscuro/claro"
+        on:click={() => setDarkMode(!darkMode)}
+        title={darkMode ? 'Modo claro' : 'Modo oscuro'}
+      >
+        {#if darkMode}
+          <i class="bi bi-sun-fill"></i>
+        {:else}
+          <i class="bi bi-moon-stars-fill"></i>
+        {/if}
+      </button>
+    </div>
 
     <div class="filtros-container d-flex gap-2 my-3">
       <select
@@ -175,21 +266,6 @@
         aria-label="Buscar producto por nombre"
         bind:value={busqueda}
       />
-    </div>
-
-    <div class="d-flex justify-content-end align-items-center gap-2 mb-3">
-      <button
-        class="btn-modo-oscuro"
-        aria-label="Cambiar modo oscuro/claro"
-        on:click={() => setDarkMode(!darkMode)}
-        title={darkMode ? 'Modo claro' : 'Modo oscuro'}
-      >
-        {#if darkMode}
-          <i class="bi bi-sun-fill"></i>
-        {:else}
-          <i class="bi bi-moon-stars-fill"></i>
-        {/if}
-      </button>
     </div>
 
     <main class="container">
