@@ -40,21 +40,73 @@
     carrito = [...carrito];
   }
 
-  function pagar() {
+  async function pagar() {
     if (!carrito.length) {
       alert('❗ No tienes productos en el carrito.');
       return;
     }
+
+    // Obtener usuario logueado
+    const cedulaUsuario = localStorage.getItem("usuario");
+    if (!cedulaUsuario) {
+      alert('Debes iniciar sesión para pagar.');
+      return;
+    }
+
+    // Obtener datos del usuario desde la API
+    let usuarioData;
+    try {
+      const res = await fetch(`https://eltragolocorest.runasp.net/api/Usuario?ciRuc=${cedulaUsuario}`);
+      if (!res.ok) throw new Error('No se pudo obtener el usuario');
+      usuarioData = await res.json();
+    } catch (e) {
+      alert('Error al obtener datos del usuario.');
+      return;
+    }
+
+    // Calcular total
     const total = carrito.reduce((sum, p) => sum + p.PROD_PRECIO * (p.Cantidad || p.CANTIDAD || 1), 0);
     const iva = total * 0.12;
     const totalConIva = total + iva;
 
-    alert(`✅ ¡Gracias por tu compra!\n\nSubtotal: $${total.toFixed(2)}\nIVA (12%): $${iva.toFixed(2)}\nTotal: $${totalConIva.toFixed(2)}`);
-    localStorage.removeItem('carrito');
-    carrito = [];
-    setTimeout(() => {
-      goto('/app/productos/index');
-    }, 1000);
+    // Validar saldo
+    if (usuarioData.USU_SALDO < totalConIva) {
+      alert('❌ Saldo insuficiente. Tu saldo es: $' + usuarioData.USU_SALDO.toFixed(2));
+      return;
+    }
+
+    // Preparar datos para la API de factura
+    const data = {
+      carrito: { Productos: carrito.map(item => ({ idProducto: item.PROD_ID, cantidad: item.Cantidad || item.CANTIDAD || 1 })) },
+      direccion: usuarioData.USU_DIRECCION,
+      metodoPago: "Saldo",
+      cliente: {
+        cliCedula: usuarioData.USU_CI_RUC,
+        cliNombre: usuarioData.USU_NOMBRE,
+        cliApellido: "",
+        cliTelefono: usuarioData.USU_TELEFONO
+      }
+    };
+
+    try {
+      const res = await fetch('https://eltragolocorest.runasp.net/api/Factura/insertarFactura', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.Message || 'Error al registrar la compra');
+      }
+      alert(`✅ ¡Gracias por tu compra!\n\nSubtotal: $${total.toFixed(2)}\nIVA (12%): $${iva.toFixed(2)}\nTotal: $${totalConIva.toFixed(2)}`);
+      localStorage.removeItem("carrito");
+      carrito = [];
+      setTimeout(() => {
+        goto('/app/productos/index');
+      }, 1000);
+    } catch (error) {
+      alert("❌ Error al registrar la compra: " + error.message);
+    }
   }
 </script>
 
@@ -98,17 +150,25 @@
     background: #2d1d3a;
     color: #f3e9ff;
   }
-  .card-producto img {
+  /* Contenedor blanco para la imagen del producto en el carrito */
+  .card-producto .img-contenedor {
+    background: #fff !important;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 200px;
     height: 200px;
-    object-fit: contain;
-    border-radius: 18px;
-    background: #f3e9ff;
+    margin: 0 auto;
     box-shadow: 0 2px 8px #4b256320;
-    transition: transform 0.2s;
+    /* Puedes ajustar el tamaño según tu diseño */
   }
-  .card-producto img:hover {
-    transform: scale(1.04);
+  .card-producto img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: transparent !important;
+    box-shadow: none;
   }
   .info-producto {
     flex: 1;
@@ -255,7 +315,9 @@
     {#each carrito as item, index}
       <div class="card-producto">
         <div class="text-center me-md-4 mb-3 mb-md-0">
-          <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} />
+          <div class="img-contenedor me-md-4 mb-3 mb-md-0">
+  <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} />
+</div>
         </div>
         <div class="info-producto">
           <h5>{item.PROD_NOMBRE}</h5>
