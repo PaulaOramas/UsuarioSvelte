@@ -11,6 +11,7 @@
   let alerta = '';
   let alertaTimeout;
   let mostrarContenido = false;
+  let cargando = true;
 
   // Modo oscuro y carga inicial
   onMount(() => {
@@ -48,30 +49,43 @@
   }
 
   async function cargarProductos() {
+    cargando = true;
     try {
       const res = await fetch('https://eltragolocorest.runasp.net/api/Producto');
       if (!res.ok) throw new Error('Error al obtener productos');
       productos = await res.json();
     } catch (e) {
       mensajeError = 'No se pudieron cargar los productos';
+    } finally {
+      cargando = false;
     }
   }
 
   function filtrarProductos() {
     return productos.filter(p => {
-      const coincideCategoria = !categoriaSeleccionada || p.CAT_NOMBRE === categoriaSeleccionada;
-      const coincideBusqueda = p.PROD_NOMBRE.toLowerCase().includes(busqueda.toLowerCase());
-      return coincideCategoria && coincideBusqueda;
+      // Si la categoría seleccionada está vacía, mostrar todos
+      if (!categoriaSeleccionada) return p.PROD_NOMBRE.toLowerCase().includes(busqueda.toLowerCase());
+      // Si el producto tiene CAT_NOMBRE, filtra por nombre
+      if (p.CAT_NOMBRE) {
+        return p.CAT_NOMBRE === categoriaSeleccionada &&
+          p.PROD_NOMBRE.toLowerCase().includes(busqueda.toLowerCase());
+      }
+      // Si el producto tiene CAT_ID, filtra por id (opcional, si usas id en el select)
+      if (p.CAT_ID) {
+        return p.CAT_ID == categoriaSeleccionada &&
+          p.PROD_NOMBRE.toLowerCase().includes(busqueda.toLowerCase());
+      }
+      return false;
     });
   }
 
   function agregarAlCarrito(producto) {
-    let carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    let existente = carritoActual.find(p => p.PROD_ID === producto.PROD_ID);
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let existente = carrito.find(p => p.PROD_ID === producto.PROD_ID);
     if (existente) {
       existente.Cantidad = (existente.Cantidad || 1) + 1;
     } else {
-      carritoActual.push({
+      carrito.push({
         PROD_ID: parseInt(producto.PROD_ID),
         PROD_NOMBRE: producto.PROD_NOMBRE,
         PROD_PRECIO: parseFloat(producto.PROD_PRECIO),
@@ -79,78 +93,24 @@
         Cantidad: 1
       });
     }
-    localStorage.setItem("carrito", JSON.stringify(carritoActual));
-    carrito.set(carritoActual); // Actualiza el store de Svelte
-    mostrarAlerta("¡Se agregó correctamente al carrito!");
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    mostrarAlerta("Producto agregado al carrito");
     // Si quieres redirigir al carrito, descomenta la siguiente línea:
     // goto('/app/carrrito');
   }
 
   function mostrarAlerta(msg, duracion = 3000) {
-    alerta = msg; // Esto sí funciona, pero asegúrate de que NO tienes otra variable 'alerta' en otro scope
+    alerta = msg;
     clearTimeout(alertaTimeout);
-    alertaTimeout = setTimeout(() => {
-      alerta = '';
-    }, duracion);
+    alertaTimeout = setTimeout(() => alerta = '', duracion);
   }
 </script>
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
 <style>
-  .hero-video-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #222;
-  }
-  .hero-video {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    object-position: center;
-    filter: brightness(0.85);
-  }
-  .hero-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    background: rgba(0,0,0,0.25);
-    text-shadow: 0 2px 8px #0008;
-    z-index: 2;
-  }
-  .hero-title {
-    font-family: 'Pacifico', cursive;
-    font-size: 3rem;
-    margin-bottom: 0.5em;
-    letter-spacing: 2px;
-  }
-  .hero-subtitle {
-    font-size: 1.5rem;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-  }
-  #main-content {
-    margin-top: -5vh;
-    background: #fff;
-    border-radius: 2rem 2rem 0 0;
-    box-shadow: 0 -4px 24px #0002;
-    padding-top: 2rem;
-    min-height: 80vh;
-  }
-  @media (max-width: 768px) {
-    .hero-title { font-size: 2rem; }
-    .hero-subtitle { font-size: 1rem; }
-    #main-content { border-radius: 1rem 1rem 0 0; }
-  }
-
   #main-content { display: none; }
   #main-content.visible { display: block; }
   #puzzle-overlay {
@@ -165,12 +125,6 @@
   .video-inicio { width: 100%; max-height: 350px; object-fit: cover; border-radius: 1rem; }
   .btn-morado { background: #6f42c1; color: #fff; }
   .btn-morado:hover { background: #5936a6; }
-  .fondo-crema {
-    background-color: #f8f9fa;
-    padding: 2rem 0;
-  }
-
-  
 </style>
 
 {#if !mostrarContenido}
@@ -178,35 +132,17 @@
 {/if}
 
 {#if mostrarContenido}
-  <!-- HERO VIDEO -->
-  <section class="hero-video-container">
-    <video class="hero-video" autoplay muted loop playsinline preload="auto">
+  <div id="main-content" class="visible">
+    <video class="video-inicio" autoplay muted loop playsinline preload="auto">
       <source src="/imagenes/GIN COCKTAIL B ROLL.mp4" type="video/mp4" />
       Tu navegador no soporta video HTML5.
     </video>
-    <div class="hero-overlay">
-      <h1 class="hero-title">Bienvenido a El Trago Loco</h1>
-      <p class="hero-subtitle">Descubre los mejores cócteles y productos exclusivos</p>
-      <a href="#main-content" class="btn btn-morado btn-lg mt-4 shadow">Ver catálogo</a>
-    </div>
-  </section>
 
-  <div id="main-content" class="visible fondo-crema">
-    <div class="d-flex justify-content-end align-items-center gap-2 mt-2 me-3">
-      <button
-        class="btn-modo-oscuro"
-        aria-label="Cambiar modo oscuro/claro"
-        on:click={() => setDarkMode(!darkMode)}
-        title={darkMode ? 'Modo claro' : 'Modo oscuro'}
-      >
-        {#if darkMode}
-          <i class="bi bi-sun-fill"></i>
-        {:else}
-          <i class="bi bi-moon-stars-fill"></i>
-        {/if}
-      </button>
+    <!-- Switch de Modo Oscuro/Claro -->
+    <div class="form-check form-switch ms-3 my-2">
+      <input class="form-check-input" type="checkbox" id="darkModeSwitch" aria-label="Activar modo oscuro" bind:checked={darkMode} on:change={() => setDarkMode(darkMode)} />
+      <label class="form-check-label text-light" for="darkModeSwitch" id="darkModeLabel">{darkMode ? 'Modo Claro' : 'Modo Oscuro'}</label>
     </div>
-
 
     <div class="filtros-container d-flex gap-2 my-3">
       <select
@@ -229,9 +165,14 @@
     </div>
 
     <main class="container">
-      <h2 class="catalogo-titulo mb-4">Catálogo de Productos</h2>
+      <h2>Catálogo de Productos</h2>
       {#if mensajeError}
         <div class="alert alert-danger">{mensajeError}</div>
+      {:else if cargando}
+        <div class="text-center my-5">
+          <div class="spinner-border text-secondary mb-2" role="status"></div>
+          <div>Cargando productos...</div>
+        </div>
       {:else}
         <div class="row g-4 justify-content-center" id="contenedorProductos">
           {#if filtrarProductos().length === 0}
@@ -240,7 +181,7 @@
             {#each filtrarProductos() as item}
               <div class="col-md-3">
                 <article class="card h-100 shadow-sm border-0">
-                  <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} class="img-fluid rounded" loading="lazy" />
+                  <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} class="img-fluid rounded" loading="lazy" style="max-height: 300px;" />
                   <div class="card-body text-center">
                     <h5 class="card-title text-dark fw-semibold">{item.PROD_NOMBRE}</h5>
                     <p class="card-text fw-bold">${parseFloat(item.PROD_PRECIO).toFixed(2)}</p>
