@@ -43,7 +43,7 @@
 
   async function pagar() {
     if (!carrito.length) {
-      mostrarToast('Error', '❗ No tienes productos en el carrito.', 'danger', 7000); // 7 segundos
+      mostrarToast('Error', '❗ No tienes productos en el carrito.', 'danger', 7000); // Mantén el toast para errores
       return;
     }
 
@@ -51,7 +51,7 @@
 
     const cedulaUsuario = localStorage.getItem("usuario");
     if (!cedulaUsuario) {
-      mostrarToast('Error', 'Debes iniciar sesión para pagar.', 'danger', 7000); // 7 segundos
+      mostrarToast('Error', 'Debes iniciar sesión para pagar.', 'danger', 7000); // Mantén el toast para errores
       return;
     }
 
@@ -61,7 +61,7 @@
       if (!res.ok) throw new Error('No se pudo obtener el usuario');
       usuarioData = await res.json();
     } catch (e) {
-      mostrarToast('Error', 'Error al obtener datos del usuario.', 'danger', 7000); // 7 segundos
+      mostrarToast('Error', 'Error al obtener datos del usuario.', 'danger', 7000); // Mantén el toast para errores
       return;
     }
 
@@ -70,7 +70,7 @@
     const totalConIva = total + iva;
 
     if (usuarioData.USU_SALDO < totalConIva) {
-      mostrarToast('Error', `❌ Saldo insuficiente. Tu saldo es: $${usuarioData.USU_SALDO.toFixed(2)}`, 'danger', 7000); // 7 segundos
+      mostrarToast('Error', `❌ Saldo insuficiente. Tu saldo es: $${usuarioData.USU_SALDO.toFixed(2)}`, 'danger', 7000); // Mantén el toast para errores
       return;
     }
 
@@ -96,14 +96,21 @@
         const errorData = await res.json();
         throw new Error(errorData.Message || 'Error al registrar la compra');
       }
-      mostrarToast('Éxito', `✅ ¡Gracias por tu compra!\n\nSubtotal: $${total.toFixed(2)}\nIVA (12%): $${iva.toFixed(2)}\nTotal: $${totalConIva.toFixed(2)}`, 'success', 100000); // 6 segundos
+      const mensajeCompra = `
+        <div class="text-center">
+          <div style="font-size:3rem; color:#28a745; margin-bottom:0.5rem;">✅</div>
+          <h4 class="fw-bold mb-3" style="color:#4B2563;">¡Gracias por tu compra!</h4>
+          <div class="mb-2"><span class="fw-semibold" style="color:#6f42c1;">Subtotal:</span> $${total.toFixed(2)}</div>
+          <div class="mb-2"><span class="fw-semibold" style="color:#6f42c1;">IVA (12%):</span> $${iva.toFixed(2)}</div>
+          <div class="mb-2 fs-5"><span class="fw-bold" style="color:#28a745;">Total:</span> $${totalConIva.toFixed(2)}</div>
+          <div class="mt-3 text-muted" style="font-size:0.98rem;">Te hemos enviado los detalles a tu cuenta.<br>¡Esperamos verte pronto!</div>
+        </div>
+      `;
+      mostrarModalCompra(mensajeCompra); // Usa el modal para mostrar los detalles de la compra
       localStorage.removeItem("carrito");
       carrito = [];
-      setTimeout(() => {
-        goto('/app/productos/index');
-      }, 1000);
     } catch (error) {
-      mostrarToast('Error', `❌ Error al registrar la compra: ${error.message}`, 'danger', 7000); // 7 segundos
+      mostrarToast('Error', `❌ Error al registrar la compra: ${error.message}`, 'danger', 7000); // Mantén el toast para errores
     } finally {
       cargandoPago = false;
     }
@@ -309,6 +316,22 @@
       padding: 1rem 0.5rem;
     }
   }
+
+  #modalCompra .modal-content {
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 32px #4b256320;
+  }
+  #modalCompra .modal-header {
+    border-bottom: none;
+  }
+  #modalCompra .modal-footer {
+    border-top: none;
+    justify-content: center;
+  }
+  #modalCompra .modal-body {
+    padding-top: 0;
+    padding-bottom: 0.5rem;
+  }
 </style>
 
 
@@ -407,6 +430,17 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          on:click={() => {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalCompra'));
+            modal.hide(); // Cierra el modal
+            goto('/app/productos/index'); // Navega al inicio
+          }}
+        >
+          Ir al inicio
+        </button>
       </div>
     </div>
   </div>
