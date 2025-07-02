@@ -43,42 +43,37 @@
 
   async function pagar() {
     if (!carrito.length) {
-      alert('❗ No tienes productos en el carrito.');
+      mostrarToast('Error', '❗ No tienes productos en el carrito.', 'danger', 7000); // 7 segundos
       return;
     }
 
-    cargandoPago = true; // Mostrar spinner
+    cargandoPago = true;
 
-    // Obtener usuario logueado
     const cedulaUsuario = localStorage.getItem("usuario");
     if (!cedulaUsuario) {
-      alert('Debes iniciar sesión para pagar.');
+      mostrarToast('Error', 'Debes iniciar sesión para pagar.', 'danger', 7000); // 7 segundos
       return;
     }
 
-    // Obtener datos del usuario desde la API
     let usuarioData;
     try {
       const res = await fetch(`https://eltragolocorest.runasp.net/api/Usuario?ciRuc=${cedulaUsuario}`);
       if (!res.ok) throw new Error('No se pudo obtener el usuario');
       usuarioData = await res.json();
     } catch (e) {
-      alert('Error al obtener datos del usuario.');
+      mostrarToast('Error', 'Error al obtener datos del usuario.', 'danger', 7000); // 7 segundos
       return;
     }
 
-    // Calcular total
     const total = carrito.reduce((sum, p) => sum + p.PROD_PRECIO * (p.Cantidad || p.CANTIDAD || 1), 0);
     const iva = total * 0.12;
     const totalConIva = total + iva;
 
-    // Validar saldo
     if (usuarioData.USU_SALDO < totalConIva) {
-      alert('❌ Saldo insuficiente. Tu saldo es: $' + usuarioData.USU_SALDO.toFixed(2));
+      mostrarToast('Error', `❌ Saldo insuficiente. Tu saldo es: $${usuarioData.USU_SALDO.toFixed(2)}`, 'danger', 7000); // 7 segundos
       return;
     }
 
-    // Preparar datos para la API de factura
     const data = {
       carrito: { Productos: carrito.map(item => ({ idProducto: item.PROD_ID, cantidad: item.Cantidad || item.CANTIDAD || 1 })) },
       direccion: usuarioData.USU_DIRECCION,
@@ -101,17 +96,42 @@
         const errorData = await res.json();
         throw new Error(errorData.Message || 'Error al registrar la compra');
       }
-      alert(`✅ ¡Gracias por tu compra!\n\nSubtotal: $${total.toFixed(2)}\nIVA (12%): $${iva.toFixed(2)}\nTotal: $${totalConIva.toFixed(2)}`);
+      mostrarToast('Éxito', `✅ ¡Gracias por tu compra!\n\nSubtotal: $${total.toFixed(2)}\nIVA (12%): $${iva.toFixed(2)}\nTotal: $${totalConIva.toFixed(2)}`, 'success', 100000); // 6 segundos
       localStorage.removeItem("carrito");
       carrito = [];
       setTimeout(() => {
         goto('/app/productos/index');
       }, 1000);
     } catch (error) {
-      alert("❌ Error al registrar la compra: " + error.message);
+      mostrarToast('Error', `❌ Error al registrar la compra: ${error.message}`, 'danger', 7000); // 7 segundos
     } finally {
-      cargandoPago = false; // Ocultar spinner
+      cargandoPago = false;
     }
+  }
+
+  function mostrarToast(titulo, mensaje, tipo = 'info', delay = 10000) { // 10 segundos por defecto
+    const toastTitle = document.getElementById('toastTitle');
+    const toastMessage = document.getElementById('toastMessage');
+    const toastNotification = document.getElementById('toastNotification');
+
+    // Cambiar el contenido del toast
+    toastTitle.textContent = titulo;
+    toastMessage.textContent = mensaje;
+
+    // Cambiar el estilo según el tipo
+    toastNotification.className = `toast text-bg-${tipo} border-0`;
+
+    // Mostrar el toast con la duración personalizada
+    const toast = new bootstrap.Toast(toastNotification, { delay });
+    toast.show();
+  }
+
+  function mostrarModalCompra(mensaje) {
+    const modalMensaje = document.getElementById('modalCompraMensaje');
+    modalMensaje.innerHTML = mensaje;
+
+    const modal = new bootstrap.Modal(document.getElementById('modalCompra'));
+    modal.show();
   }
 </script>
 
@@ -362,3 +382,32 @@
     </div>
   {/if}
 </main>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+  <div id="toastNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto" id="toastTitle">Notificación</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+    </div>
+    <div class="toast-body" id="toastMessage">
+      Mensaje aquí.
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalCompra" tabindex="-1" aria-labelledby="modalCompraLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalCompraLabel">Detalles de la Compra</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p id="modalCompraMensaje"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

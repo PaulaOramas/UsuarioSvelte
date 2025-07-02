@@ -12,6 +12,8 @@
   let alertaTimeout;
   let mostrarContenido = false;
   let cargando = true;
+  let paginaActual = 1; // Página inicial
+  const productosPorPagina = 6; // Número de productos por página
 
   // Modo oscuro y carga inicial
   onMount(() => {
@@ -103,6 +105,12 @@
     alerta = msg;
     clearTimeout(alertaTimeout);
     alertaTimeout = setTimeout(() => alerta = '', duracion);
+  }
+
+  function obtenerProductosPaginados() {
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+    return filtrarProductos().slice(inicio, fin);
   }
 </script>
 
@@ -279,10 +287,10 @@
         </div>
       {:else}
         <div class="row g-4 justify-content-center" id="contenedorProductos">
-          {#if filtrarProductos().length === 0}
+          {#if obtenerProductosPaginados().length === 0}
             <p class="text-center text-muted">No se encontraron productos.</p>
           {:else}
-            {#each filtrarProductos() as item}
+            {#each obtenerProductosPaginados() as item}
               <div class="col-md-3">
                 <article class="card h-100 shadow-sm border-0">
                   <img src={item.PROD_IMG} alt={item.PROD_NOMBRE} class="img-fluid rounded" loading="lazy" style="max-height: 300px;" />
@@ -299,6 +307,24 @@
           {/if}
         </div>
       {/if}
+
+      <div class="d-flex justify-content-center mt-4">
+        <button
+          class="btn btn-outline-secondary me-2"
+          on:click={() => paginaActual = Math.max(1, paginaActual - 1)}
+          disabled={paginaActual === 1}
+        >
+          Anterior
+        </button>
+        <span class="align-self-center">Página {paginaActual} de {Math.ceil(filtrarProductos().length / productosPorPagina)}</span>
+        <button
+          class="btn btn-outline-secondary ms-2"
+          on:click={() => paginaActual = Math.min(Math.ceil(filtrarProductos().length / productosPorPagina), paginaActual + 1)}
+          disabled={paginaActual === Math.ceil(filtrarProductos().length / productosPorPagina)}
+        >
+          Siguiente
+        </button>
+      </div>
     </main>
 
     {#if alerta}
