@@ -82,6 +82,11 @@
   }
 
   function agregarAlCarrito(producto) {
+    if (producto.PROD_STOCK <= 0) {
+      mostrarAlerta("Este producto no tiene stock disponible", 3000);
+      return;
+    }
+
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     let existente = carrito.find(p => p.PROD_ID === producto.PROD_ID);
     if (existente) {
@@ -97,8 +102,6 @@
     }
     localStorage.setItem("carrito", JSON.stringify(carrito));
     mostrarAlerta("Producto agregado al carrito");
-    // Si quieres redirigir al carrito, descomenta la siguiente línea:
-    // goto('/app/carrrito');
   }
 
   function mostrarAlerta(msg, duracion = 3000) {
